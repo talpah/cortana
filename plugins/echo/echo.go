@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	command = `(?:E|e)cho(?:\s)?(.*)`
-	compiledCmd = regexp.MustCompile(command)
-	aliases map[string]*regexp.Regexp
+	canonicalCommand = "echo"
+	command          = `(?:E|e)cho(?:\s)?(.*)`
+	compiledCmd      = regexp.MustCompile(command)
+	aliases          map[string]*regexp.Regexp
 )
 
 func isAlias(cmd string) *regexp.Regexp {
@@ -31,14 +32,27 @@ func canHandle(cmd string) *regexp.Regexp {
 }
 
 func Initialize(pins plugins.PluginManager) {
-	aliases = map[string]*regexp.Regexp{
-	}
+	aliases = map[string]*regexp.Regexp{}
 
 	pins.Register(
+		canonicalCommand,
 		command,
 		Echo,
+		Help,
 		aliases,
 	)
+}
+
+func Help(cmd string) (string, error) {
+	return `Echo command help
+
+Echo is a more advanced command.
+Echo will always reply back everything what's after 'echo', making this a good mirror service.
+
+Usage example:
+echo Demo
+echo Hello World
+`, nil
 }
 
 func Echo(cmd string) (string, error) {

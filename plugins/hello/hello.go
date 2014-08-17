@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	command = `Hello`
-	aliases map[string]*regexp.Regexp
+	canonicalCommand = "hello"
+	command          = `Hello`
+	aliases          map[string]*regexp.Regexp
 )
 
 func isAlias(cmd string) bool {
@@ -35,10 +36,24 @@ func Initialize(pins plugins.PluginManager) {
 	}
 
 	pins.Register(
+		canonicalCommand,
 		command,
 		HelloWorld,
+		Help,
 		aliases,
 	)
+}
+
+func Help(cmd string) (string, error) {
+	return `Hello command help
+
+Hello will reply to Hello or Hi commands.
+This is a demo implementation of a simple command.
+
+Usage example:
+echo Demo
+echo Hello World
+`, nil
 }
 
 func HelloWorld(cmd string) (string, error) {
