@@ -4,41 +4,48 @@ import (
 	"fmt"
 	"github.com/dlsniper/cortana/plugins"
 	"github.com/dlsniper/cortana/plugins/hello"
+	"regexp"
+	"github.com/dlsniper/cortana/plugins/echo"
 )
 
 type (
 	PluginManager struct {
-		aliases map[string]plugins.Callback
-		commands map[string]plugins.Callback
+		aliases  map[*regexp.Regexp]plugins.Callback
+		commands map[*regexp.Regexp]plugins.Callback
 	}
 )
 
 func (pm *PluginManager) findCommand(command string) (plugins.Callback, error) {
-	_, ok := pm.commands[command]
-	if ok {
-		return pm.commands[command], nil
+	for cmd, callback := range pm.commands {
+		if cmd.MatchString(command) {
+			return callback, nil
+		}
 	}
 
-	_, ok = pm.aliases[command]
-	if ok {
-		return pm.aliases[command], nil
+	for cmd, callback := range pm.aliases {
+		if cmd.MatchString(command) {
+			return callback, nil
+		}
 	}
 
 	return nil, fmt.Errorf("command '%s' not found", command)
 }
 
-func (pm *PluginManager) Register(command string, callback plugins.Callback, aliases map[int]string) {
-	if _, ok := pm.commands[command]; ok {
+func (pm *PluginManager) Register(command string, callback plugins.Callback, aliases map[string]*regexp.Regexp) {
+	regex := regexp.MustCompile(command)
+
+	if _, ok := pm.commands[regex]; ok {
 		panic(fmt.Errorf("command '%s' is already registered", command))
 	}
 
-	pm.commands[command] = callback
+	pm.commands[regex] = callback
 
-	for _, alias := range aliases {
-		if _, ok := pm.aliases[alias]; ok {
-			panic(fmt.Errorf("alias '%s' is already registered for command '%s'", alias, pm.aliases[alias]))
+	for alias, compiledAlias := range aliases {
+		if _, ok := pm.aliases[compiledAlias]; ok {
+			panic(fmt.Errorf("alias '%s' is already registered", alias))
 		}
-		pm.aliases[alias] = callback
+
+		pm.aliases[compiledAlias] = callback
 	}
 }
 
@@ -52,8 +59,9 @@ func (pm *PluginManager) Execute(command string) (string, error) {
 }
 
 func (pm *PluginManager) Initialize() {
-	pm.aliases = make(map[string]plugins.Callback)
-	pm.commands = make(map[string]plugins.Callback)
+	pm.aliases = make(map[*regexp.Regexp]plugins.Callback)
+	pm.commands = make(map[*regexp.Regexp]plugins.Callback)
 
 	hello.Initialize(pm)
+	echo.Initialize(pm)
 }

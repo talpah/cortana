@@ -3,16 +3,17 @@ package hello
 import (
 	"fmt"
 	"github.com/dlsniper/cortana/plugins"
+	"regexp"
 )
 
 var (
-	command = "Hello"
-	aliases map[int]string
+	command = `Hello`
+	aliases map[string]*regexp.Regexp
 )
 
 func isAlias(cmd string) bool {
 	for _, alias := range aliases {
-		if cmd == alias {
+		if alias.MatchString(cmd) {
 			return true
 		}
 	}
@@ -29,8 +30,8 @@ func canHandle(cmd string) bool {
 }
 
 func Initialize(pins plugins.PluginManager) {
-	aliases = map[int]string{
-		0: "Hi",
+	aliases = map[string]*regexp.Regexp{
+		"Hi": regexp.MustCompile(`Hi`),
 	}
 
 	pins.Register(
