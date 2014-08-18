@@ -1,0 +1,6 @@
+{
+    name: "hellopy", 
+    language: "python", 
+    file: "hello.py", 
+    precommand: "python"
+}
