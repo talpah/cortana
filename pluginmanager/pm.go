@@ -2,9 +2,10 @@ package pluginmanager
 
 import (
 	"fmt"
-	"github.com/dlsniper/cortana/plugins"
-	"github.com/dlsniper/cortana/plugins/echo"
-	"github.com/dlsniper/cortana/plugins/hello"
+	"../plugins"
+	"../plugins/echo"
+	"../plugins/hello"
+	"../plugins/quit"
 	"regexp"
 )
 
@@ -91,4 +92,5 @@ func (pm *PluginManager) Initialize() {
 
 	hello.Initialize(pm)
 	echo.Initialize(pm)
+	quit.Initialize(pm)
 }

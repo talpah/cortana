@@ -1,14 +1,15 @@
-package hello
+package quit
 
 import (
 	"fmt"
 	"../../plugins"
 	"regexp"
+	"os"
 )
 
 var (
-	canonicalCommand = "hello"
-	command          = `Hello`
+	canonicalCommand = "quit"
+	command          = `(Q|q)uit`
 	aliases          map[string]*regexp.Regexp
 )
 
@@ -23,7 +24,7 @@ func isAlias(cmd string) bool {
 }
 
 func canHandle(cmd string) bool {
-	if cmd == command {
+	if regexp.MustCompile(command).MatchString(cmd) {
 		return true
 	}
 
@@ -32,38 +33,36 @@ func canHandle(cmd string) bool {
 
 func Initialize(pins plugins.PluginManager) {
 	aliases = map[string]*regexp.Regexp{
-		"Hi": regexp.MustCompile(`Hi`),
+		"Exit": regexp.MustCompile(`(E|e)xit`),
+//		"Quit": regexp.MustCompile(`quit`),
 	}
 
 	pins.Register(
 		canonicalCommand,
 		command,
-		HelloWorld,
+		Quit,
 		Help,
 		aliases,
 	)
 }
 
 func Help(cmd string) (string, error) {
-	return `Hello command help
+	return `Quit command help
 
-Hello will reply to Hello or Hi commands.
-This is a demo implementation of a simple command.
+Quit will... quit
 
 Usage example:
-echo Demo
-echo Hello World
+quit
+Quit
+exit
+Exit
 `, nil
 }
 
-func HelloWorld(cmd string) (string, error) {
+func Quit(cmd string) (string, error) {
 	if !canHandle(cmd) {
 		return "", fmt.Errorf("Can't handle command %s", cmd)
 	}
-
-	if isAlias(cmd) {
-		return fmt.Sprintf("%s World!", cmd), nil
-	}
-
-	return "Hello World!", nil
+	os.Exit(0)
+	return "", nil
 }

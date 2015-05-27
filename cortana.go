@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/dlsniper/cortana/pluginmanager"
+	"./pluginmanager"
 	"os"
 	"strings"
 )

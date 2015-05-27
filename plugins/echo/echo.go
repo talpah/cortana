@@ -2,7 +2,7 @@ package echo
 
 import (
 	"fmt"
-	"github.com/dlsniper/cortana/plugins"
+	"../../plugins"
 	"regexp"
 )
 
