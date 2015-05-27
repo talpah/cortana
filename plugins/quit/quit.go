@@ -2,7 +2,7 @@ package quit
 
 import (
 	"fmt"
-	"../../plugins"
+	"github.com/dlsniper/cortana/plugins"
 	"regexp"
 	"os"
 )

@@ -2,7 +2,7 @@ package hello
 
 import (
 	"fmt"
-	"../../plugins"
+	"github.com/dlsniper/cortana/plugins"
 	"regexp"
 )
 
