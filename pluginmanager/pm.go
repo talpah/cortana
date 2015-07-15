@@ -2,10 +2,10 @@ package pluginmanager
 
 import (
 	"fmt"
-	"github.com/dlsniper/cortana/plugins"
-	"github.com/dlsniper/cortana/plugins/echo"
-	"github.com/dlsniper/cortana/plugins/hello"
-	"github.com/dlsniper/cortana/plugins/quit"
+	"github.com/talpah/cortana/plugins"
+	"github.com/talpah/cortana/plugins/echo"
+	"github.com/talpah/cortana/plugins/hello"
+	"github.com/talpah/cortana/plugins/quit"
 	"regexp"
 )
 

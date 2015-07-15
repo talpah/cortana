@@ -1,0 +1,4 @@
+app:
+  build: .
+  hostname: cortana
+  domainname: loc.al
